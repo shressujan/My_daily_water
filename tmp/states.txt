@@ -10,7 +10,8 @@ Florida
 Georgia
 Hawaii
 Idaho
-IllinoisIndiana
+Illinois
+Indiana
 Iowa
 Kansas
 Kentucky
@@ -22,7 +23,8 @@ Michigan
 Minnesota
 Mississippi
 Missouri
-MontanaNebraska
+Montana
+Nebraska
 Nevada
 New Hampshire
 New Jersey
@@ -33,7 +35,8 @@ North Dakota
 Ohio
 Oklahoma
 Oregon
-PennsylvaniaRhode Island
+Pennsylvania
+Rhode Island
 South Carolina
 South Dakota
 Tennessee
