@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Input</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+            crossorigin="anonymous"></script>
+    <script
+            src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+            integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'js/input.js') }}"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <!--<script href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.2/bootstrap-slider.js" type="text/javascript">-->
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.2/css/bootstrap-slider.css">-->
+    <link href="{{ url_for('static',filename='styles/login.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static',filename='styles/input.css') }}" rel="stylesheet">
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container">
+    <form class="form-input" action="input" method="post">
+        <div class="form-group">
+            <label for="shower">Shower&nbsp;&nbsp;
+                <output class="input-value" name="shower_input_value" id="shower_input_value">0</output>
+            </label>
+            <b>Gal</b>
+            <input type="range" class="custom-range" min="0" max="100" value="0"
+                   oninput="shower_input_value.value = shower.value" id="shower">
+        </div>
+       <div class="form-group">
+            <label for="kitchen_sink">Kitchen Sink&nbsp;&nbsp;
+                <output class="input-value" name="shower_input_value" id="kitchen_sink_input_value">0</output>
+            </label>
+            <b>Gal</b>
+            <input type="range" class="custom-range" min="0" max="100" value="0"
+                   oninput="kitchen_sink_input_value.value = kitchen_sink.value" id="kitchen_sink">
+        </div>
+       <div class="form-group">
+            <label for="bathroom_sink">Bathroom Sink&nbsp;&nbsp;
+                <output class="input-value" name="shower_input_value" id="bathroom_sink_input_value">0</output>
+            </label>
+            <b>Gal</b>
+            <input type="range" class="custom-range" min="0" max="100" value="0"
+                   oninput="bathroom_sink_input_value.value = bathroom_sink.value" id="bathroom_sink">
+        </div>
+       <div class="form-group">
+            <label for="toilet">Toilet&nbsp;&nbsp;
+                <output class="input-value" name="shower_input_value" id="toilet_input_value">0</output>
+            </label>
+            <b>Gal</b>
+            <input type="range" class="custom-range" min="0" max="100" value="0"
+                   oninput="toilet_input_value.value = toilet.value" id="toilet">
+        </div>
+        <div class="form-group">
+            <label for="drinking_water">Drinking Water&nbsp;&nbsp;
+                <output class="input-value" name="shower_input_value" id="drinking_water_input_value">0</output>
+            </label>
+            <b>Gal</b>
+            <input type="range" class="custom-range" min="0" max="100" value="0"
+                   oninput="drinking_water_input_value.value = drinking_water.value" id="drinking_water">
+        </div>
+       <div class="form-group">
+            <label for="garden_hose">Garden Hose&nbsp;&nbsp;
+                <output class="input-value" name="shower_input_value" id="garden_hose_input_value">0</output>
+            </label>
+            <b>Gal</b>
+            <input type="range" class="custom-range" min="0" max="100" value="0"
+                   oninput="garden_hose_input_value.value = garden_hose.value" id="garden_hose">
+        </div>
+       <div class="form-group">
+            <label for="miscellaneous">Miscellaneous&nbsp;&nbsp;
+                <output class="input-value" name="shower_input_value" id="miscellaneous_input_value">0</output>
+            </label>
+            <b>Gal</b>
+            <input type="range" class="custom-range" min="0" max="100" value="0"
+                   oninput="miscellaneous_input_value.value = miscellaneous.value" id="miscellaneous">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+</body>
+</html>
