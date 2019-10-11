@@ -14,9 +14,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
           crossorigin="anonymous">
-    <!--<script href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.2/bootstrap-slider.js" type="text/javascript">-->
-    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.2/css/bootstrap-slider.css">-->
-    <link href="{{ url_for('static',filename='styles/login.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static',filename='styles/navbar.css') }}" rel="stylesheet">
     <link href="{{ url_for('static',filename='styles/input.css') }}" rel="stylesheet">
 </head>
 <body>
@@ -33,7 +31,7 @@
         </div>
        <div class="form-group">
             <label for="kitchen_sink">Kitchen Sink&nbsp;&nbsp;
-                <output class="input-value" name="shower_input_value" id="kitchen_sink_input_value">0</output>
+                <output class="input-value" name="kitchen_sink_input_value" id="kitchen_sink_input_value">0</output>
             </label>
             <b>Gal</b>
             <input type="range" class="custom-range" min="0" max="100" value="0"
@@ -41,7 +39,7 @@
         </div>
        <div class="form-group">
             <label for="bathroom_sink">Bathroom Sink&nbsp;&nbsp;
-                <output class="input-value" name="shower_input_value" id="bathroom_sink_input_value">0</output>
+                <output class="input-value" name="bathroom_sink_input_value" id="bathroom_sink_input_value">0</output>
             </label>
             <b>Gal</b>
             <input type="range" class="custom-range" min="0" max="100" value="0"
@@ -49,7 +47,7 @@
         </div>
        <div class="form-group">
             <label for="toilet">Toilet&nbsp;&nbsp;
-                <output class="input-value" name="shower_input_value" id="toilet_input_value">0</output>
+                <output class="input-value" name="toilet_input_value" id="toilet_input_value">0</output>
             </label>
             <b>Gal</b>
             <input type="range" class="custom-range" min="0" max="100" value="0"
@@ -57,15 +55,15 @@
         </div>
         <div class="form-group">
             <label for="drinking_water">Drinking Water&nbsp;&nbsp;
-                <output class="input-value" name="shower_input_value" id="drinking_water_input_value">0</output>
+                <output class="input-value" name="drinking_water_input_value" id="drinking_water_input_value">0</output>
             </label>
-            <b>Gal</b>
+            <b>Glass</b>
             <input type="range" class="custom-range" min="0" max="100" value="0"
                    oninput="drinking_water_input_value.value = drinking_water.value" id="drinking_water">
         </div>
        <div class="form-group">
             <label for="garden_hose">Garden Hose&nbsp;&nbsp;
-                <output class="input-value" name="shower_input_value" id="garden_hose_input_value">0</output>
+                <output class="input-value" name="garden_hose_input_value" id="garden_hose_input_value">0</output>
             </label>
             <b>Gal</b>
             <input type="range" class="custom-range" min="0" max="100" value="0"
@@ -73,7 +71,7 @@
         </div>
        <div class="form-group">
             <label for="miscellaneous">Miscellaneous&nbsp;&nbsp;
-                <output class="input-value" name="shower_input_value" id="miscellaneous_input_value">0</output>
+                <output class="input-value" name="miscellaneous_input_value" id="miscellaneous_input_value">0</output>
             </label>
             <b>Gal</b>
             <input type="range" class="custom-range" min="0" max="100" value="0"
