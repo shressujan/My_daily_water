@@ -1,28 +1,63 @@
-filePath = '../../tmp/states.txt';
-//function readTextFile()
-//{
-//    //Initialize the FileReader object to read the 2file
-//    var fileReader = new FileReader();
-//    var blob = new Blob(["Hello world!"], { type: "text/plain" });
-//    var sampleFile = new File(blob, 'sample.txt');
-//    fileReader.onload = function(event) {
-//    var contents = event.target.result;
-//    console.log("File contents: " + contents);
-//    };
-//
-//    fileReader.onerror = function(event) {
-//        console.error("File could not be read! Code " + event.target.error.code);
-//    };
-//    console.log(fileReader.readAsText(sampleFile));
-//}
+var statesList = [
+'Alabama',
+'Alaska',
+'Arizona',
+'Arkansas',
+'California',
+'Colorado',
+'Connecticut',
+'Delaware',
+'Florida',
+'Georgia',
+'Hawaii',
+'Idaho',
+'Illinois',
+'Indiana',
+'Iowa',
+'Kansas',
+'Kentucky',
+'Louisiana',
+'Maine',
+'Maryland',
+'Massachusetts',
+'Michigan',
+'Minnesota',
+'Mississippi',
+'Missouri',
+'Montana',
+'Nebraska',
+'Nevada',
+'New Hampshire',
+'New Jersey',
+'New Mexico',
+'New York',
+'North Carolina',
+'North Dakota',
+'Ohio',
+'Oklahoma',
+'Oregon',
+'Pennsylvania',
+'Rhode Island',
+'South Carolina',
+'South Dakota',
+'Tennessee',
+'Texas',
+'Utah',
+'Vermont',
+'Virginia',
+'Washington',
+'West Virginia',
+'Wisconsin',
+'Wyoming'
+];
 
-function readFile() {
-    $.ajax({
-    url: filePath,
-    type: 'GET',
-    dataType: 'text',
-    success: function(data){
-        console.log(data);
+function listStates() {
+    var option=$('<option></option>');
+    $('#states').append(option);
+    for(state in statesList) {
+        var option=$('<option></option>');
+        option.attr('value',statesList[state]);
+        option.text(statesList[state]);
+        $('#inputState').append(option);
     }
-    });
 }

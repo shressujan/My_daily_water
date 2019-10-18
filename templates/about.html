@@ -3,12 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <title>About us</title>
-     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
           crossorigin="anonymous">
-    <link href="{{ url_for('static',filename='styles/login.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static',filename='styles/navbar.css') }}" rel="stylesheet">
 </head>
 <body>
-    {% include 'navbar.html' %}
+{% include 'navbar.html' %}
+<div class="container">
+
+    <p>Background
+        Water, water everywhere but not a drop to drink. This has become a very popular proverb in past few years. According
+        to the article “How much water is there on earth?” published on USGS science for a changing world, “About 71 percent
+        of the Earth's surface is water-covered, and the oceans hold about 96.5 percent of all Earth's water.”. That seems
+        like a lot of water, right? While this is true, but we also can’t ignore the fact that only a few percentages of the
+        water that’s on the earth surface is actually usable. According to the article from Jeremiah Castelo, “What is the
+        Percentage of Drinkable Water on Earth?”, “Of the waters occupying 70% of the earth’s surface, only 3% is considered
+        fresh water. Furthermore, about 2.6% of this freshwater is inaccessible for humans.” So, this only leaves us
+        approximately 0.4% of the earth’s water which is actually usable for drinking and household purposes, and that
+        percentage has to be shared among the 7 billion people in earth. And to make it even worse, the amount usable water
+        is declining while the population around the world is increasing at a rapid rate and this makes it very hard to meet
+        the water supply needs of the ever-growing population. This is why many countries, over the past few years, have
+        already begun to face water supply shortage problems.
+
+    </p>
+    <p>
+        Introduction
+
+        The idea of this project is to create a web-based database application that keeps track of water used for day to day
+        activities. Since this will be a web-based app, a user would essentially require an internet connection and a
+        computer/mobile device to use it. This app will be designed to be used as an awareness program that educates its’
+        users about their water consumption and the impacts of their use on the diminishing water resources. Based on their
+        day to day inputs of their water consumption, this application will analyze their water usage activities and present
+        the report to the respective user in terms of graphs and pictures to give them a visual representation, and the idea
+        behind this is to help the user get a better understanding of their water usage activities and create an impact on
+        them.
+        The way this application is intended to be used is that, it will have a homepage or login page, which will require
+        the users to login. This will be the first screen of this app and, if they don’t already have an account, then they
+        will be given an option to sign up and create an account in a centralized online MySQL database which will run on a
+        local server on my mac for now. Once the user is logged in, then the app will pull up the user’s info page which
+        will contain user’s information like first name, last name, address etc. And, this page will give the users options
+        to get their daily, weekly, monthly, or yearly statistics/report of their water usage, and along with that the users
+        will also be given an option to view the water usage report for any city or state. They will also be given an option
+        to view their water usage report within a certain timeframe to help them understand if their daily water usage has
+        gone up or down in that timeframe. And, of course they can also do the same with the water usage report for a state,
+        or a city. Users also need a place where they can log in their daily water usage activities like shower, kitchen,
+        restroom, cleaning, garden hose, miscellaneous etc. And, this will be provided to them in a separate page.
+    </p>
+</div>
 </body>
 </html>
