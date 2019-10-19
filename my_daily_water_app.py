@@ -9,10 +9,59 @@ mysql = MySQL()
 
 # MySQL configurations
 app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = ''
-app.config['MYSQL_DATABASE_DB'] = 'Water_Usage_Tracker'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'ROOT321$'
+app.config['MYSQL_DATABASE_DB'] = 'Daily_water_tracker'
 app.config['MYSQL_DATABASE_HOST'] = '127.0.0.1'
 mysql.init_app(app)
+
+
+def add_user(email, password, first_name, last_name, street_address, state, city, zip_code):
+    db_connection = mysql.connect()
+    cursor = db_connection.cursor()
+    cursor.callproc('sp_add_user',
+                    (email, hash_password(password), first_name, last_name, street_address, state, city, zip_code))
+    data = cursor.fetchall()
+
+    if len(data) is 0:
+        db_connection.commit()
+        return json.dumps({'message': 'User created successfully !'})
+    else:
+        return json.dumps({'error': str(data[0])})
+
+
+def add_daily_water_use(username, shower, toilet, bathroom_sink, kitchen_sink, drinking_water,
+                        sprinkler, miscellaneous):
+    db_connection = mysql.connect()
+    cursor = db_connection.cursor()
+    cursor.callproc('sp_add_daily_water_data',
+                    (username, shower, toilet, bathroom_sink, kitchen_sink, drinking_water,
+                     sprinkler, miscellaneous, date.today()))
+    data = cursor.fetchall()
+
+    if len(data) is 0:
+        db_connection.commit()
+        cursor.close()
+        return json.dumps({'message': 'Daily Water Use data added successfully !'})
+    else:
+        cursor.close()
+        return json.dumps({'error': str(data[0])})
+
+
+def is_valid_login(username, user_password):
+
+    get_user_account_sql_query = "SELECT * FROM User_Account WHERE username = %s"
+    username_data = (username,)
+
+    db_connection = mysql.connect()
+    cursor = db_connection.cursor()
+    cursor.execute(get_user_account_sql_query, username_data)
+    result = cursor.fetchone()
+
+    if result:
+        return check_password_matches(result[1], user_password)
+    else:
+        # TODO return a message to user saying user name doesn't exist
+        print("User account does not exist!")
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -89,52 +138,3 @@ def index():
 
 
 if __name__ == '__main__': app.run()
-
-
-def add_user(email, password, first_name, last_name, street_address, state, city, zip_code):
-    db_connection = mysql.connect()
-    cursor = db_connection.cursor()
-    cursor.callproc('sp_createUser',
-                    (email, hash_password(password), first_name, last_name, street_address, state, city, zip_code))
-    data = cursor.fetchall()
-
-    if len(data) is 0:
-        db_connection.commit()
-        return json.dumps({'message': 'User created successfully !'})
-    else:
-        return json.dumps({'error': str(data[0])})
-
-
-def add_daily_water_use(username, shower, toilet, bathroom_sink, kitchen_sink, drinking_water,
-                        sprinkler, miscellaneous):
-    db_connection = mysql.connect()
-    cursor = db_connection.cursor()
-    cursor.callproc('sp_add_daily_water_usage_data',
-                    (username, shower, toilet, bathroom_sink, kitchen_sink, drinking_water,
-                     sprinkler, miscellaneous, date.today()))
-    data = cursor.fetchall()
-
-    if len(data) is 0:
-        db_connection.commit()
-        cursor.close()
-        return json.dumps({'message': 'Daily Water Use data added successfully !'})
-    else:
-        cursor.close()
-        return json.dumps({'error': str(data[0])})
-
-
-def is_valid_login(username, user_password):
-
-    get_user_account_sql_query = "SELECT * FROM User_Account WHERE username = %s"
-    username_data = (username,)
-
-    db_connection = mysql.connect()
-    cursor = db_connection.cursor()
-    cursor.execute(get_user_account_sql_query, username_data)
-    result = cursor.fetchone()
-
-    if result:
-        return check_password_matches(result[1], user_password)
-    else:
-        # TODO return a message to user saying user name doesn't exist
-        print("User account does not exist!")
