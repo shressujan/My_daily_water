@@ -20,7 +20,12 @@
 <body>
 {% include 'navbar.html' %}
 <div class="container">
-    <form class="form-input" action="input" method="post">
+    <form class="form-input" method="POST" role="form">
+         <div class="form-group">
+             <label for="username"><font size="6"><b>User</b></font>
+                <output class="input-value" name="username" id="username">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{username}}</output>
+            </label>
+        </div>
         <div class="form-group">
             <label for="shower_slider">Shower&nbsp;&nbsp;
                 <output class="input-value" name="shower_input_value" id="shower_input_value">0</output>
