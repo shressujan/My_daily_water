@@ -1,3 +1,7 @@
 .input-value {
     float: right;
 }
+
+output#username {
+    padding-top: 5%;
+}

@@ -83,6 +83,7 @@ def signup():
     return render_template('signup.html')
 
 
+# @app.route('/input', defaults={'user_email': None}, methods=['POST'])
 @app.route('/input/<user_email>', methods=['GET', 'POST'])
 def input_data(user_email):
 
@@ -98,13 +99,13 @@ def input_data(user_email):
         add_daily_water_use(user_email, shower, toilet, bathroom_sink, kitchen_sink, drinking_water_input,
                             sprinkler, miscellaneous)
 
-        return redirect(url_for('report', user_email=user_email))
+        return redirect(url_for('report', username=user_email))
 
-    return render_template('input.html')
+    return render_template('input.html', username=user_email)
 
 
-@app.route('/report/<user_email>')
-def report(user_email):
+@app.route('/report/<username>')
+def report(username):
     # TODO render the report template for the given user
     return render_template('report.html')
 
@@ -112,17 +113,17 @@ def report(user_email):
 @app.route('/login', defaults={'user_email': '', 'user_password': ''}, methods=['GET', 'POST'])
 @app.route('/login/<user_email>/<user_password>', methods=['GET', 'POST'])
 def login(user_email, user_password):
-    if user_email == '' and user_password == '':
-        redirect(url_for('index'))
 
     if request.method == 'POST':
         email = request.form['inputEmail']
         password = request.form['inputPassword']
-
         if is_valid_login(email, password):
             return redirect(url_for('input_data', user_email=email))
         else:
             print('do something here')
+
+    elif user_email == '' and user_password == '':
+        return render_template('login.html')
 
     return render_template('login.html', user_email=user_email, user_password=user_password)
 
@@ -134,7 +135,7 @@ def about():
 
 @app.route('/')
 def index():
-    return render_template('login.html')
+    return render_template('about.html')
 
 
 if __name__ == '__main__': app.run()
