@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Report</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
           crossorigin="anonymous">
     <link href="{{ url_for('static',filename='styles/navbar.css') }}" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0-rc.1/Chart.bundle.js"></script>
+    <script src="{{ url_for('static',filename='js/report.js')}}"></script>
 </head>
 <body>
-{% include 'navbar.html' %}
+{% include 'navbar-logged-in.html' %}
+<div class="container graph">
+    <canvas id="speedChart" width="600" height="400"></canvas>
+</div>
 </body>
 </html>

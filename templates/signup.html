@@ -14,13 +14,12 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
           crossorigin="anonymous">
-    <!--<script type="text/javascript" src="{{ url_for('static', filename = 'js/getStatesList.js') }}"></script>-->
-    <!--<script type="text/javascript" src="{{ url_for('static', filename = 'js/main.js') }}"></script>-->
+    <script type="text/javascript" src="{{ url_for('static', filename = 'js/getStatesList.js') }}"></script>
     <link href="{{ url_for('static',filename='styles/main.css') }}" rel="stylesheet">
     <link href="{{ url_for('static',filename='styles/navbar.css') }}" rel="stylesheet">
 </head>
 <body onload="listStates()">
-{% include 'navbar.html' %}
+{% include 'navbar-logged-out.html' %}
 <div class="container">
     <form class="form-signup" action="signup" method="POST" role="form">
         <div class="form-row">
