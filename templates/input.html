@@ -23,60 +23,67 @@
     <form class="form-input" method="POST" role="form">
         <div class="form-group">
             <label for="shower_slider">Shower&nbsp;&nbsp;
-                <output class="input-value" name="shower_input_value" id="shower_input_value">0</output>
+                <output class="input-value" name="shower_input_value" id="shower_input_value">{{shower_saved_data}}</output>
             </label>
             <b>Gal</b>
-            <input type="range" class="custom-range" min="0" max="100" value="0"
-                   oninput="shower_input_value.value = shower_slider.value" id="shower_slider" name="shower_input" value="{{shower_saved_data}}">
+            <input type="range" class="custom-range" min="0" max="100"
+                   oninput="shower_input_value.value = shower_slider.value" id="shower_slider" name="shower_input"
+                   value="{{shower_saved_data}}">
         </div>
-       <div class="form-group">
+        <div class="form-group">
             <label for="kitchen_sink_slider">Kitchen Sink&nbsp;&nbsp;
-                <output class="input-value" name="kitchen_sink_input_value" id="kitchen_sink_input_value">0</output>
+                <output class="input-value" name="kitchen_sink_input_value" id="kitchen_sink_input_value">{{kitchen_sink_saved_data}}</output>
             </label>
             <b>Gal</b>
-            <input type="range" class="custom-range" min="0" max="100" value="0"
-                   oninput="kitchen_sink_input_value.value = kitchen_sink_slider.value" id="kitchen_sink_slider" name="kitchen_sink_input" value="{{kitchen_sink_saved_data}}">
+            <input type="range" class="custom-range" min="0" max="100"
+                   oninput="kitchen_sink_input_value.value = kitchen_sink_slider.value" id="kitchen_sink_slider"
+                   name="kitchen_sink_input" value="{{kitchen_sink_saved_data}}">
         </div>
-       <div class="form-group">
+        <div class="form-group">
             <label for="bathroom_sink_slider">Bathroom Sink&nbsp;&nbsp;
-                <output class="input-value" name="bathroom_sink_input_value" id="bathroom_sink_input_value">0</output>
+                <output class="input-value" name="bathroom_sink_input_value" id="bathroom_sink_input_value">{{bathroom_sink_saved_data}}</output>
             </label>
             <b>Gal</b>
-            <input type="range" class="custom-range" min="0" max="100" value="0"
-                   oninput="bathroom_sink_input_value.value = bathroom_sink_slider.value" id="bathroom_sink_slider" name="bathroom_sink_input" value="{{bathroom_sink_saved_data}}">
+            <input type="range" class="custom-range" min="0" max="100"
+                   oninput="bathroom_sink_input_value.value = bathroom_sink_slider.value" id="bathroom_sink_slider"
+                   name="bathroom_sink_input" value="{{bathroom_sink_saved_data}}">
         </div>
-       <div class="form-group">
+        <div class="form-group">
             <label for="toilet_slider">Toilet&nbsp;&nbsp;
-                <output class="input-value" name="toilet_input_value" id="toilet_input_value">0</output>
+                <output class="input-value" name="toilet_input_value" id="toilet_input_value">{{toilet_saved_data}}</output>
             </label>
             <b>Gal</b>
-            <input type="range" class="custom-range" min="0" max="100" value="0"
-                   oninput="toilet_input_value.value = toilet_slider.value" id="toilet_slider" name="toilet_input" value="{{toilet_saved_data}}">
+            <input type="range" class="custom-range" min="0" max="100"
+                   oninput="toilet_input_value.value = toilet_slider.value" id="toilet_slider" name="toilet_input"
+                   value="{{toilet_saved_data}}">
         </div>
         <div class="form-group">
             <label for="drinking_water_slider">Drinking Water&nbsp;&nbsp;
-                <output class="input-value" name="drinking_water_input_value" id="drinking_water_input_value">0</output>
+                <output class="input-value" name="drinking_water_input_value" id="drinking_water_input_value">{{drinking_water_saved_data}}</output>
             </label>
             <!--TODO change Glass into Glasses for more than 1 glass-->
             <b>Glass</b>
-            <input type="range" class="custom-range" min="0" max="20" value="0"
-                   oninput="drinking_water_input_value.value = drinking_water_slider.value" id="drinking_water_slider" name="drinking_water_input" value="{{drinking_water_saved_data}}">
+            <input type="range" class="custom-range" min="0" max="20"
+                   oninput="drinking_water_input_value.value = drinking_water_slider.value" id="drinking_water_slider"
+                   name="drinking_water_input" value="{{drinking_water_saved_data}}">
         </div>
-       <div class="form-group">
-            <label for="garden_hose_slider">Garden Hose&nbsp;&nbsp;
-                <output class="input-value" name="garden_hose_input_value" id="garden_hose_input_value">0</output>
+        <div class="form-group">
+            <label for="sprinkler_slider">Sprinkler&nbsp;&nbsp;
+                <output class="input-value" name="sprinkler_input_value" id="sprinkler_input_value">{{sprinkler_saved_data}}</output>
             </label>
             <b>Gal</b>
-            <input type="range" class="custom-range" min="0" max="100" value="0"
-                   oninput="garden_hose_input_value.value = garden_hose_slider.value" id="garden_hose_slider" name="garden_hose_input" value="{{garden_hose_saved_data}}">
+            <input type="range" class="custom-range" min="0" max="100"
+                   oninput="sprinkler_input_value.value = sprinkler_slider.value" id="sprinkler_slider"
+                   name="sprinkler_input" value="{{sprinkler_saved_data}}">
         </div>
-       <div class="form-group">
+        <div class="form-group">
             <label for="miscellaneous_slider">Miscellaneous&nbsp;&nbsp;
-                <output class="input-value" name="miscellaneous_input_value" id="miscellaneous_input_value">0</output>
+                <output class="input-value" name="miscellaneous_input_value" id="miscellaneous_input_value">{{miscellaneous_saved_data}}</output>
             </label>
             <b>Gal</b>
-            <input type="range" class="custom-range" min="0" max="100" value="0"
-                   oninput="miscellaneous_input_value.value = miscellaneous_slider.value" id="miscellaneous_slider" name="miscellaneous_input" value="{{miscellaneous_saved_data}}">
+            <input type="range" class="custom-range" min="0" max="100"
+                   oninput="miscellaneous_input_value.value = miscellaneous_slider.value" id="miscellaneous_slider"
+                   name="miscellaneous_input" value="{{miscellaneous_saved_data}}">
         </div>
         <button id="data-input-button" type="submit" class="btn btn-primary">Submit</button>
         <button id="data-save-button" type="button" class="btn btn-primary">Save</button>
