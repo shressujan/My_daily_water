@@ -21,18 +21,13 @@
 {% include 'navbar-logged-in.html' %}
 <div class="container">
     <form class="form-input" method="POST" role="form">
-         <div class="form-group">
-             <label for="username"><font size="6"><b>User</b></font>
-                <output class="input-value" name="username" id="username">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{username}}</output>
-            </label>
-        </div>
         <div class="form-group">
             <label for="shower_slider">Shower&nbsp;&nbsp;
                 <output class="input-value" name="shower_input_value" id="shower_input_value">0</output>
             </label>
             <b>Gal</b>
             <input type="range" class="custom-range" min="0" max="100" value="0"
-                   oninput="shower_input_value.value = shower_slider.value" id="shower_slider" name="shower_input">
+                   oninput="shower_input_value.value = shower_slider.value" id="shower_slider" name="shower_input" value="{{shower_saved_data}}">
         </div>
        <div class="form-group">
             <label for="kitchen_sink_slider">Kitchen Sink&nbsp;&nbsp;
@@ -40,7 +35,7 @@
             </label>
             <b>Gal</b>
             <input type="range" class="custom-range" min="0" max="100" value="0"
-                   oninput="kitchen_sink_input_value.value = kitchen_sink_slider.value" id="kitchen_sink_slider" name="kitchen_sink_input">
+                   oninput="kitchen_sink_input_value.value = kitchen_sink_slider.value" id="kitchen_sink_slider" name="kitchen_sink_input" value="{{kitchen_sink_saved_data}}">
         </div>
        <div class="form-group">
             <label for="bathroom_sink_slider">Bathroom Sink&nbsp;&nbsp;
@@ -48,7 +43,7 @@
             </label>
             <b>Gal</b>
             <input type="range" class="custom-range" min="0" max="100" value="0"
-                   oninput="bathroom_sink_input_value.value = bathroom_sink_slider.value" id="bathroom_sink_slider" name="bathroom_sink_input">
+                   oninput="bathroom_sink_input_value.value = bathroom_sink_slider.value" id="bathroom_sink_slider" name="bathroom_sink_input" value="{{bathroom_sink_saved_data}}">
         </div>
        <div class="form-group">
             <label for="toilet_slider">Toilet&nbsp;&nbsp;
@@ -56,7 +51,7 @@
             </label>
             <b>Gal</b>
             <input type="range" class="custom-range" min="0" max="100" value="0"
-                   oninput="toilet_input_value.value = toilet_slider.value" id="toilet_slider" name="toilet_input">
+                   oninput="toilet_input_value.value = toilet_slider.value" id="toilet_slider" name="toilet_input" value="{{toilet_saved_data}}">
         </div>
         <div class="form-group">
             <label for="drinking_water_slider">Drinking Water&nbsp;&nbsp;
@@ -65,7 +60,7 @@
             <!--TODO change Glass into Glasses for more than 1 glass-->
             <b>Glass</b>
             <input type="range" class="custom-range" min="0" max="20" value="0"
-                   oninput="drinking_water_input_value.value = drinking_water_slider.value" id="drinking_water_slider" name="drinking_water_input">
+                   oninput="drinking_water_input_value.value = drinking_water_slider.value" id="drinking_water_slider" name="drinking_water_input" value="{{drinking_water_saved_data}}">
         </div>
        <div class="form-group">
             <label for="garden_hose_slider">Garden Hose&nbsp;&nbsp;
@@ -73,7 +68,7 @@
             </label>
             <b>Gal</b>
             <input type="range" class="custom-range" min="0" max="100" value="0"
-                   oninput="garden_hose_input_value.value = garden_hose_slider.value" id="garden_hose_slider" name="garden_hose_input">
+                   oninput="garden_hose_input_value.value = garden_hose_slider.value" id="garden_hose_slider" name="garden_hose_input" value="{{garden_hose_saved_data}}">
         </div>
        <div class="form-group">
             <label for="miscellaneous_slider">Miscellaneous&nbsp;&nbsp;
@@ -81,9 +76,10 @@
             </label>
             <b>Gal</b>
             <input type="range" class="custom-range" min="0" max="100" value="0"
-                   oninput="miscellaneous_input_value.value = miscellaneous_slider.value" id="miscellaneous_slider" name="miscellaneous_input">
+                   oninput="miscellaneous_input_value.value = miscellaneous_slider.value" id="miscellaneous_slider" name="miscellaneous_input" value="{{miscellaneous_saved_data}}">
         </div>
         <button id="data-input-button" type="submit" class="btn btn-primary">Submit</button>
+        <button id="data-save-button" type="button" class="btn btn-primary">Save</button>
     </form>
 </div>
 </body>
