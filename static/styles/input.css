@@ -2,6 +2,6 @@
     float: right;
 }
 
-output#username {
-    padding-top: 5%;
+.container {
+    margin-top: 50px;
 }
