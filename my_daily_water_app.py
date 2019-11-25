@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect, json, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flaskext.mysql import MySQL
 from datetime import date
 from encryptor import *
+import simplejson as json
 
 app = Flask(__name__)
 app.secret_key = 'password'
@@ -164,18 +165,132 @@ def report(username):
     result = cursor.fetchall()
 
     if result:
-        # TODO show the result in graph form
-        print('how to show the result in graph')
-        return render_template('report.html')
+
+        # shower_data_entries = []
+        # kitchen_sink_data_entries = []
+        # bathroom_sink_data_entries = []
+        # toilet_data_entries = []
+        # drinking_water_data_entries = []
+        # sprinkler_data_entries = []
+        # miscellaneous_data_entries = []
+        # date_data_entries = []
+        water_data_result = []
+        for entry in result:
+            json_water_data_object = {
+                'shower_data': entry[1],  # using index 1 since 0 is username and am discarding it for now
+                'kitchen_sink_data': entry[2],
+                'bathroom_sink_data': entry[3],
+                'toilet_data': entry[4],
+                'drinking_water_data': entry[5],
+                'sprinkler_data': entry[6],
+                'miscellaneous_data': entry[7],
+                'date': entry[8]
+            }
+            water_data_result.append(json_water_data_object)
+
+        # json_shower_data = {
+        #     'name': 'shower_data',
+        #     'values': shower_data_entries
+        # }
+        # json_kitchen_sink_data = {
+        #     'name': 'kitchen_sink_data',
+        #     'values': kitchen_sink_data_entries
+        # }
+        # json_bathroom_sink_data = {
+        #     'name': 'shower_data',
+        #     'values': bathroom_sink_data_entries
+        # }
+        # json_toilet_data = {
+        #     'name': 'bathroom_sink_data',
+        #     'values': toilet_data_entries
+        # }
+        # json_drinking_water_data = {
+        #     'name': 'drinking_water_data',
+        #     'values': drinking_water_data_entries
+        # }
+        # json_sprinkler_data = {
+        #     'name': 'sprinkler_data',
+        #     'values': sprinkler_data_entries
+        # }
+        # json_miscellaneous_data = {
+        #     'name': 'miscellaneous_data',
+        #     'values': miscellaneous_data_entries
+        # }
+        # json_water_data = [json_shower_data, json_kitchen_sink_data, json_bathroom_sink_data,
+        #                    json_toilet_data, json_drinking_water_data, json_sprinkler_data,
+        #                    json_miscellaneous_data]
+
+        # json_water_data_object = {
+        #     'chart': 'Water data collection',
+        #     'series': json_water_data,
+        #     'dates': date_data_entries
+        # }
+
+        json_result = jsonify(water_data_result)
+        print(json_result)
+        return render_template('report.html', username=username, json_result=json_result)
+
     else:
         return json.dumps({'error': 'No record entry found for User ' + username})
+    return None
+
+
+def default_date_converter(o):
+    if isinstance(o, date):
+        return o.isoformat()
+
+
+@app.route('/ajax-state-report/<state>', defaults={'city': ''}, methods=["GET"])
+@app.route('/ajax-city-report/<city>', defaults={'state': ''}, methods=["GET"])
+def ajax_report(state, city):
+    if state:
+        get_water_usage_date_query = "SELECT D.* FROM Daily_Water_Usage AS D, Address AS A, User AS U " \
+                                     "where A.state = %s AND " \
+                                     "A.address_id = U.address_id AND " \
+                                     "U.username = D.username"
+        data = (state,)
+
+    elif city:
+        get_water_usage_date_query = "SELECT D.* FROM Daily_Water_Usage AS D, Address AS A, User AS U " \
+                                     "where A.city = %s AND " \
+                                     "A.address_id = U.address_id AND " \
+                                     "U.username = D.username"
+        data = (city,)
+
+    db_connection = mysql.connect()
+    cursor = db_connection.cursor()
+    cursor.execute(get_water_usage_date_query, data)
+    result = cursor.fetchall()
+
+    if result:
+
+        water_data_result = []
+        for entry in result:
+            json_water_data_object = {
+                'shower_data': entry[1],  # using index 1 since 0 is username and am discarding it for now
+                'kitchen_sink_data': entry[2],
+                'bathroom_sink_data': entry[3],
+                'toilet_data': entry[4],
+                'drinking_water_data': entry[5],
+                'sprinkler_data': entry[6],
+                'miscellaneous_data': entry[7],
+                'Time': entry[8]
+            }
+            water_data_result.append(json_water_data_object)
+
+        json_result = json.dumps(water_data_result, default=default_date_converter)
+        # json_result = jsonify(water_data_result)
+        print(json_result)
+        return json_result
+
+    else:
+        return json.dumps({'error': 'No record entry found'})
     return None
 
 
 @app.route('/login', defaults={'user_email': '', 'user_password': ''}, methods=['GET', 'POST'])
 @app.route('/login/<user_email>/<user_password>', methods=['GET', 'POST'])
 def login(user_email, user_password):
-
     # checks if user is already logged in, opens up the input page for that user
     if 'username' in session:
         username = session['username']

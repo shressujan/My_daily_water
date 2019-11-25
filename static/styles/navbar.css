@@ -10,3 +10,8 @@ img {
 .signup-link {
   margin-left: auto!important;
 }
+
+.dropdown-item {
+  color: black!important;
+  backgound-color: aliceblue;
+}
