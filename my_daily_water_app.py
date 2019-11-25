@@ -166,67 +166,64 @@ def report(username):
 
     if result:
 
-        # shower_data_entries = []
-        # kitchen_sink_data_entries = []
-        # bathroom_sink_data_entries = []
-        # toilet_data_entries = []
-        # drinking_water_data_entries = []
-        # sprinkler_data_entries = []
-        # miscellaneous_data_entries = []
-        # date_data_entries = []
-        water_data_result = []
+        shower_data_entries = []
+        kitchen_sink_data_entries = []
+        bathroom_sink_data_entries = []
+        toilet_data_entries = []
+        drinking_water_data_entries = []
+        sprinkler_data_entries = []
+        miscellaneous_data_entries = []
+        date_data_entries = []
+
         for entry in result:
-            json_water_data_object = {
-                'shower_data': entry[1],  # using index 1 since 0 is username and am discarding it for now
-                'kitchen_sink_data': entry[2],
-                'bathroom_sink_data': entry[3],
-                'toilet_data': entry[4],
-                'drinking_water_data': entry[5],
-                'sprinkler_data': entry[6],
-                'miscellaneous_data': entry[7],
-                'date': entry[8]
-            }
-            water_data_result.append(json_water_data_object)
+            shower_data_entries.append(entry[1])
+            kitchen_sink_data_entries.append(entry[2])
+            bathroom_sink_data_entries.append(entry[3])
+            toilet_data_entries.append(entry[4])
+            drinking_water_data_entries.append(entry[5])
+            sprinkler_data_entries.append(entry[6])
+            miscellaneous_data_entries.append(entry[7])
+            date_data_entries.append(entry[8])
 
-        # json_shower_data = {
-        #     'name': 'shower_data',
-        #     'values': shower_data_entries
-        # }
-        # json_kitchen_sink_data = {
-        #     'name': 'kitchen_sink_data',
-        #     'values': kitchen_sink_data_entries
-        # }
-        # json_bathroom_sink_data = {
-        #     'name': 'shower_data',
-        #     'values': bathroom_sink_data_entries
-        # }
-        # json_toilet_data = {
-        #     'name': 'bathroom_sink_data',
-        #     'values': toilet_data_entries
-        # }
-        # json_drinking_water_data = {
-        #     'name': 'drinking_water_data',
-        #     'values': drinking_water_data_entries
-        # }
-        # json_sprinkler_data = {
-        #     'name': 'sprinkler_data',
-        #     'values': sprinkler_data_entries
-        # }
-        # json_miscellaneous_data = {
-        #     'name': 'miscellaneous_data',
-        #     'values': miscellaneous_data_entries
-        # }
-        # json_water_data = [json_shower_data, json_kitchen_sink_data, json_bathroom_sink_data,
-        #                    json_toilet_data, json_drinking_water_data, json_sprinkler_data,
-        #                    json_miscellaneous_data]
+        json_shower_data = {
+            'name': 'shower_data',
+            'values': shower_data_entries
+        }
+        json_kitchen_sink_data = {
+            'name': 'kitchen_sink_data',
+            'values': kitchen_sink_data_entries
+        }
+        json_bathroom_sink_data = {
+            'name': 'shower_data',
+            'values': bathroom_sink_data_entries
+        }
+        json_toilet_data = {
+            'name': 'bathroom_sink_data',
+            'values': toilet_data_entries
+        }
+        json_drinking_water_data = {
+            'name': 'drinking_water_data',
+            'values': drinking_water_data_entries
+        }
+        json_sprinkler_data = {
+            'name': 'sprinkler_data',
+            'values': sprinkler_data_entries
+        }
+        json_miscellaneous_data = {
+            'name': 'miscellaneous_data',
+            'values': miscellaneous_data_entries
+        }
+        json_water_data = [json_shower_data, json_kitchen_sink_data, json_bathroom_sink_data,
+                           json_toilet_data, json_drinking_water_data, json_sprinkler_data,
+                           json_miscellaneous_data]
 
-        # json_water_data_object = {
-        #     'chart': 'Water data collection',
-        #     'series': json_water_data,
-        #     'dates': date_data_entries
-        # }
+        json_water_data_object = {
+            'chart': 'Water data collection',
+            'series': json_water_data,
+            'dates': date_data_entries
+        }
 
-        json_result = jsonify(water_data_result)
+        json_result = jsonify(json_water_data_object)
         print(json_result)
         return render_template('report.html', username=username, json_result=json_result)
 
@@ -244,17 +241,21 @@ def default_date_converter(o):
 @app.route('/ajax-city-report/<city>', defaults={'state': ''}, methods=["GET"])
 def ajax_report(state, city):
     if state:
-        get_water_usage_date_query = "SELECT D.* FROM Daily_Water_Usage AS D, Address AS A, User AS U " \
+        get_water_usage_date_query = "SELECT D.* FROM Daily_water_tracker.Daily_Water_Usage AS D, " \
+                                     "Daily_water_tracker.Address AS A, Daily_water_tracker.User AS U " \
                                      "where A.state = %s AND " \
                                      "A.address_id = U.address_id AND " \
-                                     "U.username = D.username"
+                                     "U.username = D.username " \
+                                     "ORDER BY D.date"
         data = (state,)
 
     elif city:
-        get_water_usage_date_query = "SELECT D.* FROM Daily_Water_Usage AS D, Address AS A, User AS U " \
+        get_water_usage_date_query = "SELECT D.* FROM Daily_water_tracker.Daily_Water_Usage AS D, " \
+                                     "Daily_water_tracker.Address AS A, Daily_water_tracker.User AS U " \
                                      "where A.city = %s AND " \
                                      "A.address_id = U.address_id AND " \
-                                     "U.username = D.username"
+                                     "U.username = D.username " \
+                                     "ORDER BY D.date"
         data = (city,)
 
     db_connection = mysql.connect()
@@ -264,21 +265,66 @@ def ajax_report(state, city):
 
     if result:
 
-        water_data_result = []
-        for entry in result:
-            json_water_data_object = {
-                'shower_data': entry[1],  # using index 1 since 0 is username and am discarding it for now
-                'kitchen_sink_data': entry[2],
-                'bathroom_sink_data': entry[3],
-                'toilet_data': entry[4],
-                'drinking_water_data': entry[5],
-                'sprinkler_data': entry[6],
-                'miscellaneous_data': entry[7],
-                'Time': entry[8]
-            }
-            water_data_result.append(json_water_data_object)
+        shower_data_entries = []
+        kitchen_sink_data_entries = []
+        bathroom_sink_data_entries = []
+        toilet_data_entries = []
+        drinking_water_data_entries = []
+        sprinkler_data_entries = []
+        miscellaneous_data_entries = []
+        date_data_entries = []
 
-        json_result = json.dumps(water_data_result, default=default_date_converter)
+        for entry in result:
+            shower_data_entries.append(entry[1])
+            kitchen_sink_data_entries.append(entry[2])
+            bathroom_sink_data_entries.append(entry[3])
+            toilet_data_entries.append(entry[4])
+            drinking_water_data_entries.append(entry[5])
+            sprinkler_data_entries.append(entry[6])
+            miscellaneous_data_entries.append(entry[7])
+            date_data_entries.append(entry[8])
+
+        json_shower_data = {
+            'name': 'shower_data',
+            'values': shower_data_entries
+        }
+        json_kitchen_sink_data = {
+            'name': 'kitchen_sink_data',
+            'values': kitchen_sink_data_entries
+        }
+        json_bathroom_sink_data = {
+            'name': 'shower_data',
+            'values': bathroom_sink_data_entries
+        }
+        json_toilet_data = {
+            'name': 'bathroom_sink_data',
+            'values': toilet_data_entries
+        }
+        json_drinking_water_data = {
+            'name': 'drinking_water_data',
+            'values': drinking_water_data_entries
+        }
+        json_sprinkler_data = {
+            'name': 'sprinkler_data',
+            'values': sprinkler_data_entries
+        }
+        json_miscellaneous_data = {
+            'name': 'miscellaneous_data',
+            'values': miscellaneous_data_entries
+        }
+        json_water_data = [json_shower_data, json_kitchen_sink_data, json_bathroom_sink_data,
+                           json_toilet_data, json_drinking_water_data, json_sprinkler_data,
+                           json_miscellaneous_data]
+
+        json_water_data_object = {
+            'chart': 'Water data collection',
+            'series': json_water_data,
+            'dates': date_data_entries
+        }
+
+        print(date_data_entries)
+
+        json_result = json.dumps(json_water_data_object, default=default_date_converter)
         # json_result = jsonify(water_data_result)
         print(json_result)
         return json_result
