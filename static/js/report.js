@@ -8,9 +8,12 @@ $(document).ready(function() {
         if (selected == 'State') {
             selected_chart = $('#inputState').val();
             url = '/ajax-state-report/' + selected_chart;
-        } else {
+        } else if (selected == 'City') {
             selected_chart = $('#inputCity').val();
             url = '/ajax-city-report/' + selected_chart;
+        } else {
+            selected_chart = selected;
+            url = '/ajax-user-report/' + selected_chart;
         }
         $.ajax({
             url: url,
@@ -33,7 +36,7 @@ $(document).change(function() {
     var selected = $('#graph').val();
     if (selected == 'State') {
         $('.state').show();
-    } else {
+    } else if (selected == 'City') {
         $('.city').show();
     }
 });
@@ -43,67 +46,67 @@ $(document).change(function() {
 //Read the data
 function generate_graph(data) {
 
-    //Clear the svg before loading
-    d3.selectAll('svg > g > *').remove();
+  //Clear the svg before loading
+  d3.selectAll('svg > g > *').remove();
 
-    height = 600
-    width = 1000
-    margin = ({top: 20, right: 20, bottom: 30, left: 30})
+  height = 700;
+  width = 1000;
 
-    x = d3.scaleUtc()
-       .domain(d3.extent(data.dates))
-       .range([margin.left, width - margin.right])
+  margin = ({top: 20, right: 20, bottom: 30, left: 30})
 
-    y = d3.scaleLinear()
-       .domain([0, d3.max(data.series, d => d3.max(d.values))]).nice()
-       .range([height - margin.bottom, margin.top])
+  x = d3.scaleUtc()
+    .domain(d3.extent(data.dates))
+    .range([margin.left, width - margin.right])
+
+  y = d3.scaleLinear()
+    .domain([0, d3.max(data.series, d => d3.max(d.values))]).nice()
+    .range([height - margin.bottom, margin.top])
+
+  xAxis = g => g
+    .attr("transform", `translate(0,${height - margin.bottom})`)
+    .call(d3.axisBottom(x).ticks(width / 80).tickSizeOuter(0))
+
+  yAxis = g => g
+    .attr("transform", `translate(${margin.left},0)`)
+    .call(d3.axisLeft(y))
+    .call(g => g.select(".domain").remove())
+    .call(g => g.select(".tick:last-of-type text").clone()
+        .attr("x", 3)
+        .attr("text-anchor", "start")
+        .attr("font-weight", "bold")
+        .text(data.y))
+
+  line = d3.line()
+    .defined(d => !isNaN(d))
+    .x((d, i) => x(data.dates[i]))
+    .y(d => y(d))
+
+  const svg = d3.select("svg")
+     .attr("viewBox", [0, 0, width, height]);
+
+  svg.append("g")
+      .call(xAxis);
+
+  svg.append("g")
+      .call(yAxis);
+
+  const path = svg.append("g")
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 1.5)
+      .attr("stroke-linejoin", "round")
+      .attr("stroke-linecap", "round")
+    .selectAll("path")
+    .data(data.series)
+    .join("path")
+      .style("mix-blend-mode", "multiply")
+      .attr("d", d => line(d.values));
 
 
-    xAxis = g => g
-        .attr("transform", `translate(0,${height - margin.bottom})`)
-        .call(d3.axisBottom(x).ticks(width / 80).tickSizeOuter(0))
-
-    yAxis = g => g
-        .attr("transform", `translate(${margin.left},0)`)
-        .call(d3.axisLeft(y))
-        .call(g => g.select(".domain").remove())
-        .call(g => g.select(".tick:last-of-type text").clone()
-            .attr("x", 3)
-            .attr("text-anchor", "start")
-            .attr("font-weight", "bold")
-            .text(data.y))
+  svg.call(hover, path);
 
 
-    line = d3.line()
-        .defined(d => !isNaN(d))
-        .x(d => x(d))
-//        .x((d, i) => x(data.dates[i]))
-        .y(d => y(d))
-
-    const svg = d3.select("svg")
-        .attr("viewBox", [0, 0, width, height]);
-
-    svg.append("g")
-        .call(xAxis);
-
-    svg.append("g")
-        .call(yAxis);
-
-    const path = svg.append("g")
-        .attr("fill", "none")
-        .attr("stroke", "steelblue")
-        .attr("stroke-width", 1.5)
-        .attr("stroke-linejoin", "round")
-        .attr("stroke-linecap", "round")
-      .selectAll("path")
-      .data(data.series)
-      .join("path")
-        .style("mix-blend-mode", "multiply")
-        .attr("d", d => line(d.values));
-
-    svg.call(hover, path);
-
-    function hover(svg, path) {
+  function hover(svg, path) {
       svg.style("position", "relative");
 
       if ("ontouchstart" in document) svg
@@ -149,7 +152,7 @@ function generate_graph(data) {
         path.style("mix-blend-mode", "multiply").attr("stroke", null);
         dot.attr("display", "none");
       }
-    }
+  }
 
-    return svg.node();
+  return svg.node();
 }
