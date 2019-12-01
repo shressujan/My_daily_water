@@ -3,6 +3,7 @@ from flaskext.mysql import MySQL
 from datetime import date
 from encryptor import *
 import simplejson as json
+from decimal import Decimal
 
 app = Flask(__name__)
 app.secret_key = 'password'
@@ -155,91 +156,19 @@ def input_data(user_email):
 
 @app.route('/report/<username>')
 def report(username):
-    # TODO render the report template for the given user
-    get_water_usage_date_query = "SELECT * FROM Daily_Water_Usage where username = %s"
-    username_data = (username,)
-
-    db_connection = mysql.connect()
-    cursor = db_connection.cursor()
-    cursor.execute(get_water_usage_date_query, username_data)
-    result = cursor.fetchall()
-
-    if result:
-
-        shower_data_entries = []
-        kitchen_sink_data_entries = []
-        bathroom_sink_data_entries = []
-        toilet_data_entries = []
-        drinking_water_data_entries = []
-        sprinkler_data_entries = []
-        miscellaneous_data_entries = []
-        date_data_entries = []
-
-        for entry in result:
-            shower_data_entries.append(entry[1])
-            kitchen_sink_data_entries.append(entry[2])
-            bathroom_sink_data_entries.append(entry[3])
-            toilet_data_entries.append(entry[4])
-            drinking_water_data_entries.append(entry[5])
-            sprinkler_data_entries.append(entry[6])
-            miscellaneous_data_entries.append(entry[7])
-            date_data_entries.append(entry[8])
-
-        json_shower_data = {
-            'name': 'shower_data',
-            'values': shower_data_entries
-        }
-        json_kitchen_sink_data = {
-            'name': 'kitchen_sink_data',
-            'values': kitchen_sink_data_entries
-        }
-        json_bathroom_sink_data = {
-            'name': 'shower_data',
-            'values': bathroom_sink_data_entries
-        }
-        json_toilet_data = {
-            'name': 'bathroom_sink_data',
-            'values': toilet_data_entries
-        }
-        json_drinking_water_data = {
-            'name': 'drinking_water_data',
-            'values': drinking_water_data_entries
-        }
-        json_sprinkler_data = {
-            'name': 'sprinkler_data',
-            'values': sprinkler_data_entries
-        }
-        json_miscellaneous_data = {
-            'name': 'miscellaneous_data',
-            'values': miscellaneous_data_entries
-        }
-        json_water_data = [json_shower_data, json_kitchen_sink_data, json_bathroom_sink_data,
-                           json_toilet_data, json_drinking_water_data, json_sprinkler_data,
-                           json_miscellaneous_data]
-
-        json_water_data_object = {
-            'chart': 'Water data collection',
-            'series': json_water_data,
-            'dates': date_data_entries
-        }
-
-        json_result = jsonify(json_water_data_object)
-        print(json_result)
-        return render_template('report.html', username=username, json_result=json_result)
-
-    else:
-        return json.dumps({'error': 'No record entry found for User ' + username})
-    return None
+    return render_template('report.html', username=username)
 
 
 def default_date_converter(o):
     if isinstance(o, date):
-        return o.isoformat()
+        date_array = o.isoformat().split("-")
+        return date_array[0]
 
 
-@app.route('/ajax-state-report/<state>', defaults={'city': ''}, methods=["GET"])
-@app.route('/ajax-city-report/<city>', defaults={'state': ''}, methods=["GET"])
-def ajax_report(state, city):
+@app.route('/ajax-state-report/<state>', defaults={'city': '', 'username': ''}, methods=["GET"])
+@app.route('/ajax-city-report/<city>', defaults={'state': '', 'username': ''}, methods=["GET"])
+@app.route('/ajax-user-report/<username>', defaults={'state': '', 'city': ''}, methods=["GET"])
+def ajax_report(state, city, username):
     if state:
         get_water_usage_date_query = "SELECT D.* FROM Daily_water_tracker.Daily_Water_Usage AS D, " \
                                      "Daily_water_tracker.Address AS A, Daily_water_tracker.User AS U " \
@@ -258,6 +187,11 @@ def ajax_report(state, city):
                                      "ORDER BY D.date"
         data = (city,)
 
+    else:
+        get_water_usage_date_query = "SELECT * FROM Daily_Water_Usage where username = %s"\
+                                     "ORDER BY date"
+        data = (username,)
+
     db_connection = mysql.connect()
     cursor = db_connection.cursor()
     cursor.execute(get_water_usage_date_query, data)
@@ -266,23 +200,61 @@ def ajax_report(state, city):
     if result:
 
         shower_data_entries = []
-        kitchen_sink_data_entries = []
-        bathroom_sink_data_entries = []
         toilet_data_entries = []
+        bathroom_sink_data_entries = []
+        kitchen_sink_data_entries = []
         drinking_water_data_entries = []
         sprinkler_data_entries = []
         miscellaneous_data_entries = []
         date_data_entries = []
 
+        current_date = result[0][8].strftime('%Y')
+        average_shower_data = 0
+        average_toilet_data = 0
+        average_bathroom_sink_data = 0
+        average_kitchen_sink_data = 0
+        average_drinking_water_data = 0
+        average_sprinkler_data = 0
+        average_miscellaneous_data = 0
+
         for entry in result:
-            shower_data_entries.append(entry[1])
-            kitchen_sink_data_entries.append(entry[2])
-            bathroom_sink_data_entries.append(entry[3])
-            toilet_data_entries.append(entry[4])
-            drinking_water_data_entries.append(entry[5])
-            sprinkler_data_entries.append(entry[6])
-            miscellaneous_data_entries.append(entry[7])
-            date_data_entries.append(entry[8])
+            if current_date != entry[8].strftime('%Y'):
+
+                shower_data_entries.append(average_shower_data)
+                toilet_data_entries.append(average_toilet_data)
+                bathroom_sink_data_entries.append(average_bathroom_sink_data)
+                kitchen_sink_data_entries.append(average_kitchen_sink_data)
+                drinking_water_data_entries.append(average_drinking_water_data)
+                sprinkler_data_entries.append(average_sprinkler_data)
+                miscellaneous_data_entries.append(average_miscellaneous_data)
+                date_data_entries.append(current_date)
+
+                average_shower_data = 0
+                average_toilet_data = 0
+                average_bathroom_sink_data = 0
+                average_kitchen_sink_data = 0
+                average_drinking_water_data = 0
+                average_sprinkler_data = 0
+                average_miscellaneous_data = 0
+                current_date = entry[8].strftime('%Y')
+
+            average_shower_data += entry[1]
+            average_toilet_data += entry[2]
+            average_bathroom_sink_data += entry[3]
+            average_kitchen_sink_data += entry[4]
+            average_drinking_water_data += round(entry[5] * Decimal('0.06340149'))  # conversion from cup to gallons
+            average_sprinkler_data += entry[6]
+            average_miscellaneous_data += entry[7]
+
+        # This appends the leftover data once the exited the loop
+        shower_data_entries.append(average_shower_data)
+        toilet_data_entries.append(average_toilet_data)
+        bathroom_sink_data_entries.append(average_bathroom_sink_data)
+        kitchen_sink_data_entries.append(average_kitchen_sink_data)
+        drinking_water_data_entries.append(average_drinking_water_data)
+        sprinkler_data_entries.append(average_sprinkler_data)
+        miscellaneous_data_entries.append(average_miscellaneous_data)
+        date_data_entries.append(current_date)
 
         json_shower_data = {
             'name': 'shower_data',
@@ -293,11 +265,11 @@ def ajax_report(state, city):
             'values': kitchen_sink_data_entries
         }
         json_bathroom_sink_data = {
-            'name': 'shower_data',
+            'name': 'bathroom_sink_data',
             'values': bathroom_sink_data_entries
         }
         json_toilet_data = {
-            'name': 'bathroom_sink_data',
+            'name': 'toilet_data',
             'values': toilet_data_entries
         }
         json_drinking_water_data = {
@@ -322,11 +294,8 @@ def ajax_report(state, city):
             'dates': date_data_entries
         }
 
-        print(date_data_entries)
-
         json_result = json.dumps(json_water_data_object, default=default_date_converter)
-        # json_result = jsonify(water_data_result)
-        print(json_result)
+
         return json_result
 
     else:
