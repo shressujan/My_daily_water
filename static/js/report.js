@@ -90,6 +90,13 @@ function generate_graph(data) {
   svg.append("g")
       .call(yAxis);
 
+//Create Title
+  svg.append("text")
+	 .attr("x", width / 2 )
+     .attr("y", 50)
+     .style("text-anchor", "middle")
+     .text("Daily Water Usage Report in Gallons");
+
   const path = svg.append("g")
       .attr("fill", "none")
       .attr("stroke", "steelblue")
