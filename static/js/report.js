@@ -55,7 +55,7 @@ function generate_graph(data) {
 
   margin = ({top: 20, right: 20, bottom: 30, left: 30})
 
-  x = d3.scaleUtc()
+  x = d3.scaleLinear()
     .domain(d3.extent(data.dates))
     .range([margin.left, width - margin.right])
 
@@ -96,7 +96,7 @@ function generate_graph(data) {
 	 .attr("x", width / 2 )
      .attr("y", 50)
      .style("text-anchor", "middle")
-     .text("Daily Water Usage Report in Gallons");
+     .text("Average Water Usage Report (Gal)");
 
   const path = svg.append("g")
       .attr("fill", "none")
@@ -200,7 +200,7 @@ function generate_bar_chart(data) {
 
 
     x.domain(data.series.map(function(d) { return d.name; }));
-    y.domain([0, d3.max(data.series.map(function(d) { return d.values.reduce((a, b) => a + b, 0);}))]);
+    y.domain([0, d3.max(data.series.map(function(d) { return (d.values.reduce((a, b) => a + b, 0) / d.values.length);}))]);
 
     g.append("g")
         .attr("class", "axis axis--x")
@@ -223,8 +223,8 @@ function generate_bar_chart(data) {
         .attr("class", "bar")
         .attr("x", function(d) { return x(d.name);})
         .attr("width", x.bandwidth())
-        .attr("y", function(d) { return y(d.values.reduce((a, b) => a + b, 0)); })
-        .attr("height", function(d) { return height - y(d.values.reduce((a, b) => a + b, 0)); })
+        .attr("y", function(d) { return y((d.values.reduce((a, b) => a + b, 0)) / d.values.length); })
+        .attr("height", function(d) { return height - y((d.values.reduce((a, b) => a + b, 0)) / d.values.length); })
         .style('cursor', 'pointer')
         .on('mouseover', d => {
           div
@@ -232,7 +232,7 @@ function generate_bar_chart(data) {
             .duration(200)
             .style('opacity', 0.9);
           div
-            .html(d.name + '<br/>' + d.values.reduce((a, b) => a + b, 0) + ' gal')
+            .html(d.name + '<br/>' + (d.values.reduce((a, b) => a + b, 0) / d.values.length) + ' gal')
             .style('left', d3.event.pageX + 'px')
             .style('top', d3.event.pageY - 28 + 'px');
         })

@@ -209,51 +209,55 @@ def ajax_report(state, city, username):
         date_data_entries = []
 
         current_date = result[0][8].strftime('%Y')
-        average_shower_data = 0
-        average_toilet_data = 0
-        average_bathroom_sink_data = 0
-        average_kitchen_sink_data = 0
-        average_drinking_water_data = 0
-        average_sprinkler_data = 0
-        average_miscellaneous_data = 0
+        total_shower_data = 0
+        total_toilet_data = 0
+        total_bathroom_sink_data = 0
+        total_kitchen_sink_data = 0
+        total_drinking_water_data = 0
+        total_sprinkler_data = 0
+        total_miscellaneous_data = 0
+        counter = 0
 
         for entry in result:
             if current_date != entry[8].strftime('%Y'):
 
-                shower_data_entries.append(average_shower_data)
-                toilet_data_entries.append(average_toilet_data)
-                bathroom_sink_data_entries.append(average_bathroom_sink_data)
-                kitchen_sink_data_entries.append(average_kitchen_sink_data)
-                drinking_water_data_entries.append(average_drinking_water_data)
-                sprinkler_data_entries.append(average_sprinkler_data)
-                miscellaneous_data_entries.append(average_miscellaneous_data)
+                shower_data_entries.append(total_shower_data / counter)
+                toilet_data_entries.append(total_toilet_data / counter)
+                bathroom_sink_data_entries.append(total_bathroom_sink_data / counter)
+                kitchen_sink_data_entries.append(total_kitchen_sink_data / counter)
+                drinking_water_data_entries.append(total_drinking_water_data / counter)
+                sprinkler_data_entries.append(total_sprinkler_data / counter)
+                miscellaneous_data_entries.append(total_miscellaneous_data / counter)
                 date_data_entries.append(current_date)
 
-                average_shower_data = 0
-                average_toilet_data = 0
-                average_bathroom_sink_data = 0
-                average_kitchen_sink_data = 0
-                average_drinking_water_data = 0
-                average_sprinkler_data = 0
-                average_miscellaneous_data = 0
+                counter = 0
+
+                total_shower_data = 0
+                total_toilet_data = 0
+                total_bathroom_sink_data = 0
+                total_kitchen_sink_data = 0
+                total_drinking_water_data = 0
+                total_sprinkler_data = 0
+                total_miscellaneous_data = 0
                 current_date = entry[8].strftime('%Y')
 
-            average_shower_data += entry[1]
-            average_toilet_data += entry[2]
-            average_bathroom_sink_data += entry[3]
-            average_kitchen_sink_data += entry[4]
-            average_drinking_water_data += round(entry[5] * Decimal('0.06340149'))  # conversion from cup to gallons
-            average_sprinkler_data += entry[6]
-            average_miscellaneous_data += entry[7]
+            total_shower_data += entry[1]
+            total_toilet_data += entry[2]
+            total_bathroom_sink_data += entry[3]
+            total_kitchen_sink_data += entry[4]
+            total_drinking_water_data += round(entry[5] * Decimal('0.06340149'))  # conversion from cup to gallons
+            total_sprinkler_data += entry[6]
+            total_miscellaneous_data += entry[7]
+            counter += 1
 
         # This appends the leftover data once the exited the loop
-        shower_data_entries.append(average_shower_data)
-        toilet_data_entries.append(average_toilet_data)
-        bathroom_sink_data_entries.append(average_bathroom_sink_data)
-        kitchen_sink_data_entries.append(average_kitchen_sink_data)
-        drinking_water_data_entries.append(average_drinking_water_data)
-        sprinkler_data_entries.append(average_sprinkler_data)
-        miscellaneous_data_entries.append(average_miscellaneous_data)
+        shower_data_entries.append(total_shower_data / counter)
+        toilet_data_entries.append(total_toilet_data / counter)
+        bathroom_sink_data_entries.append(total_bathroom_sink_data / counter)
+        kitchen_sink_data_entries.append(total_kitchen_sink_data / counter)
+        drinking_water_data_entries.append(total_drinking_water_data / counter)
+        sprinkler_data_entries.append(total_sprinkler_data / counter)
+        miscellaneous_data_entries.append(total_miscellaneous_data / counter)
         date_data_entries.append(current_date)
 
         json_shower_data = {
