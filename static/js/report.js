@@ -22,6 +22,7 @@ $(document).ready(function() {
             success: function(response) {
             console.log(response)
                 generate_graph(response);
+                generate_bar_chart(response);
             },
             error: function(error) {
                 console.log(error);
@@ -81,7 +82,7 @@ function generate_graph(data) {
     .x((d, i) => x(data.dates[i]))
     .y(d => y(d))
 
-  const svg = d3.select("svg")
+  const svg = d3.select("#multiline")
      .attr("viewBox", [0, 0, width, height]);
 
   svg.append("g")
@@ -162,4 +163,84 @@ function generate_graph(data) {
   }
 
   return svg.node();
+}
+
+
+function generate_bar_chart(data) {
+
+    var svg = d3.select("#bar");
+
+    var margin = {top: 40, right: 20, bottom: 30, left: 40},
+        width = +svg.attr("width") - margin.left - margin.right,
+        height = +svg.attr("height") - margin.top - margin.bottom;
+
+    var formatPercent = d3.format(".0%");
+
+
+    var x = d3.scaleBand()
+        .rangeRound([0, width])
+        .padding(0.1);
+
+    var y = d3.scaleLinear()
+        .rangeRound([height, 0]);
+
+    // Define the div for the tooltip
+    var div = d3
+        .select('body')
+        .append('div')
+        .attr('class', 'tooltip')
+        .style('opacity', 0);
+
+
+    svg.attr("width", width + margin.left + margin.right)
+       .attr("height", height + margin.top + margin.bottom);
+
+    var g =  svg.append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+    x.domain(data.series.map(function(d) { return d.name; }));
+    y.domain([0, d3.max(data.series.map(function(d) { return d.values.reduce((a, b) => a + b, 0);}))]);
+
+    g.append("g")
+        .attr("class", "axis axis--x")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+    g.append("g")
+        .attr("class", "axis axis--y")
+        .call(d3.axisLeft(y))
+      .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", "0.71em")
+        .attr("text-anchor", "end")
+        .text("Gallons");
+
+    g.selectAll(".bar")
+      .data(data.series)
+      .enter().append("rect")
+        .attr("class", "bar")
+        .attr("x", function(d) { return x(d.name);})
+        .attr("width", x.bandwidth())
+        .attr("y", function(d) { return y(d.values.reduce((a, b) => a + b, 0)); })
+        .attr("height", function(d) { return height - y(d.values.reduce((a, b) => a + b, 0)); })
+        .style('cursor', 'pointer')
+        .on('mouseover', d => {
+          div
+            .transition()
+            .duration(200)
+            .style('opacity', 0.9);
+          div
+            .html(d.name + '<br/>' + d.values.reduce((a, b) => a + b, 0) + ' gal')
+            .style('left', d3.event.pageX + 'px')
+            .style('top', d3.event.pageY - 28 + 'px');
+        })
+        .on('mouseout', () => {
+          div
+            .transition()
+            .duration(500)
+            .style('opacity', 0);
+        });
+
 }

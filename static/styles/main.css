@@ -2,6 +2,30 @@ div.container {
  padding-top: 50px;
 }
 
+.bar {
+  fill: steelblue;
+}
+
+.bar:hover {
+  fill: #000080 ;
+}
+
+.axis--x path {
+  display: none;
+}
+
+div.tooltip {
+  color: white;
+  position: absolute;
+  text-align: center;
+  width: 150px;
+  height: 40px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: rgba(0,0,0,.8);
+  border: 2px solid black;
+  pointer-events: none;
+}
 
 path {
     stroke-width: 1;
