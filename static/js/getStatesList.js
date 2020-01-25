@@ -52,8 +52,6 @@ var statesList = [
 ];
 
 function listStates() {
-    var option=$('<option></option>');
-    $('#states').append(option);
     for(state in statesList) {
         var option=$('<option></option>');
         option.attr('value',statesList[state]);

@@ -1,5 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <img src= "{{ url_for('static', filename = 'assets/water.png') }}" width="50" height="50" class="d-inline-block align-top" alt="">
+    <img src="{{ url_for('static', filename = 'assets/water.png') }}" width="50" height="50"
+         class="d-inline-block align-top" alt="">
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
@@ -10,14 +11,19 @@
             </li>
         </ul>
         <ul class="navbar-nav signup-link">
-             <li class="nav-item">
-                <a class="nav-link" id="user">{{username}}</a>
+            <li class="nav-item">
+                <div class="dropdown show">
+                    <a class="nav-link dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">{{username}}</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="nav-link dropdown-item" href="http://127.0.0.1:5000/report/{{username}}">Report</a>
+                    </div>
+                </div>
             </li>
         </ul>
-        </ul>
-         <ul class="navbar-nav logout-link">
-             <li class="nav-item">
-                <a class="nav-link" href="http://127.0.0.1:5000/logout">&nbsp Log Out</a>
+        <ul class="navbar-nav logout-link">
+            <li class="nav-item">
+                <a class="nav-link" href="http://127.0.0.1:5000/logout"> Log Out</a>
             </li>
         </ul>
     </div>

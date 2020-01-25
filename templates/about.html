@@ -7,48 +7,74 @@
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
           crossorigin="anonymous">
     <link href="{{ url_for('static',filename='styles/navbar.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static',filename='styles/about.css') }}" rel="stylesheet">
 </head>
 <body>
 {% include 'navbar-logged-out.html' %}
 <div class="container" style="background-image: url('static/assets/water-life.jpg');">
     <img src= "{{ url_for('static', filename = 'assets/save_water.png') }}" width="350" height="350" class="d-inline-block rounded float-right" alt="">
-    <p>Background
-        Water, water everywhere but not a drop to drink. This has become a very popular proverb in past few years. According
-        to the article “How much water is there on earth?” published on USGS science for a changing world, “About 71 percent
-        of the Earth's surface is water-covered, and the oceans hold about 96.5 percent of all Earth's water.”. That seems
-        like a lot of water, right? While this is true, but we also can’t ignore the fact that only a few percentages of the
-        water that’s on the earth surface is actually usable. According to the article from Jeremiah Castelo, “What is the
-        Percentage of Drinkable Water on Earth?”, “Of the waters occupying 70% of the earth’s surface, only 3% is considered
-        fresh water. Furthermore, about 2.6% of this freshwater is inaccessible for humans.” So, this only leaves us
-        approximately 0.4% of the earth’s water which is actually usable for drinking and household purposes, and that
-        percentage has to be shared among the 7 billion people in earth. And to make it even worse, the amount usable water
-        is declining while the population around the world is increasing at a rapid rate and this makes it very hard to meet
-        the water supply needs of the ever-growing population. This is why many countries, over the past few years, have
-        already begun to face water supply shortage problems.
+    <p> <h3>Abstract</h3>
+        This article talks about the importance of conserving water resources and the ways we start conserving.
+        It talks about using a database application “My Daily Water Tracker” on a daily basis to help keep track
+        of daily water consumption per person, city, and state. It then talks about why this app is long overdue.
+        The article also talks about logging every water habit in the app daily to help generate an accurate report/statistic
+        which could later be used for research purpose. The main goal of this project is to get a greater number of people use
+        this app and hopefully improve their water habits and, in the process, create a positive impact water resources conservation.
+        <br>
+        Keywords—daily water, habits, app, MySQL, report
+
 
     </p>
     <p>
-        Introduction
+       <h3>Introduction</h3>
 
-        The idea of this project is to create a web-based database application that keeps track of water used for day to day
-        activities. Since this will be a web-based app, a user would essentially require an internet connection and a
-        computer/mobile device to use it. This app will be designed to be used as an awareness program that educates its’
-        users about their water consumption and the impacts of their use on the diminishing water resources. Based on their
-        day to day inputs of their water consumption, this application will analyze their water usage activities and present
-        the report to the respective user in terms of graphs and pictures to give them a visual representation, and the idea
-        behind this is to help the user get a better understanding of their water usage activities and create an impact on
-        them.
-        The way this application is intended to be used is that, it will have a homepage or login page, which will require
-        the users to login. This will be the first screen of this app and, if they don’t already have an account, then they
-        will be given an option to sign up and create an account in a centralized online MySQL database which will run on a
-        local server on my mac for now. Once the user is logged in, then the app will pull up the user’s info page which
-        will contain user’s information like first name, last name, address etc. And, this page will give the users options
-        to get their daily, weekly, monthly, or yearly statistics/report of their water usage, and along with that the users
-        will also be given an option to view the water usage report for any city or state. They will also be given an option
-        to view their water usage report within a certain timeframe to help them understand if their daily water usage has
-        gone up or down in that timeframe. And, of course they can also do the same with the water usage report for a state,
-        or a city. Users also need a place where they can log in their daily water usage activities like shower, kitchen,
-        restroom, cleaning, garden hose, miscellaneous etc. And, this will be provided to them in a separate page.
+        Water, water everywhere but not a drop to drink. This has become a very popular proverb in past few years. About 71 percent of the Earth's surface is water-covered, and the oceans hold about 96.5 percent of all Earth's water [1]. That seems like a lot of water, right? While this is true, but we also can’t ignore the fact that only a few percentages of the water that’s on the earth surface is actually usable. Of the waters occupying 70% of the earth’s surface, only 3% is considered fresh water. Furthermore, about 2.6% of this freshwater is inaccessible for humans.” So, this only leaves us approximately 0.4% of the earth’s water which is actually usable for drinking and household purposes, and that percentage has to be shared among the 7 billion people in earth [2]. And to make it even worse, the amount usable water is declining while the population around the world is increasing at a rapid rate and this makes it very hard to meet the water supply needs of the ever-growing population. This is why many countries, over the past few years, have already begun to face water supply shortage problems.
+        <br>
+	    The project initially started out with an idea about a web-based application that would track user’s daily water usage, and therefore the name of the project “My Daily Water Tracker”. Every big database must compulsorily have ER diagram to show the flow of the data. This project is no different, it has an ER diagram that shows the relationship between 4 main entities in the database. i.e. User_Account that holds information about all the active user accounts, User that hold information about the user themselves, Address that hold information about user addresses, and last but not least Daily_Water_Usage that keeps record of all the major water usages per user.
+
+        <img class= "er diagram" src="{{ url_for('static', filename = 'assets/ERD.png') }}" width="100%" height="60%"
+         class="d-inline-block align-top" alt="">
+        <br>
+        The purpose of this project is to design an awareness application that educate its’s users about their daily water habits and help them realize how much water they are wasting on a daily basis. And now since, the project is fully functional, the app definitely going to make some positive impact on the people and the environment. The general overview of how this app works is, it records the daily water usage inputs from the users, analyzes the data, and finally generate a report which is then presented to the user in a graphical form to help them better understand about their water usage habits.
+        <br>
+        Like every good application has strong foundations, this app also has two very strong foundation that carries the entire application. And, they are MYSQL database and python. The app uses python programming language for the user interface/front-end, and MYSQL database for the backend or storing the data. The user interface is kept very simple, there is a website that users will connect to, a welcome page, a sign-up page, a login page, an input page, and last but not least a report page. The welcome page hosts the information about the application itself and its intended use. The login page allows the active users to login in and start using the app. The sign-up page allows new users create an account in the centralized MYSQL database. After the user has logged in, the input page is pulled up. The input page allows the users to log their daily water habits such as shower, kitchen, bathroom, drinking water, miscellaneous etc. And for that, input page provides users sliders which they can use to select the appropriate amount of water used for each category. For example:- there is a kitchen sink slider that tracks water used in kitchen sink per day, there is a shower slider to track the amount of water used during shower, there is also a drinking water slider to keep track of the number of cups of water drank in a day, and there is bathroom sink slider that keeps track of water used in bathroom sink, and so on. Users have the option to view their water habits on the report page. The main purpose of this page is to help create an impact on the users and improve their water habits. Additionally, users can also view the water report of a city or a state. And this is very helpful for research purpose or if someone is just curious to know which city is using excess amount of water, or which city has decreased the amount of water used after its people started using the app, and same goes for different states.
+
+        <img class= "signup diagram" src="{{ url_for('static', filename = 'assets/signup.png') }}" width="100%" height="60%"
+                 class="d-inline-block align-top" alt="">
+        <img class= "login diagram" src="{{ url_for('static', filename = 'assets/login.png') }}" width="100%" height="60%"
+         class="d-inline-block align-top" alt="">
+        <img class= "input diagram" src="{{ url_for('static', filename = 'assets/input.png') }}" width="100%" height="60%"
+         class="d-inline-block align-top" alt="">
+        <img class= "report diagram" src="{{ url_for('static', filename = 'assets/report.png') }}" width="100%" height="60%"
+         class="d-inline-block align-top" alt="">
+    </p>
+    <p>
+        <h3>Python for Front-end development</h3>
+
+        This project uses python as a principal programming language. Python is an interpreted, high-level, general purpose programming language to help programmers write clear, logical codes for small or large-scale projects.[3] The reason to choose Python for front-end development is because it is a highly flexible programming language, meaning python supports a vast number of frameworks and has thousands of libraries that can be imported to designed and perform very specific tasks. In this project, python uses a micro-framework called Flask. Flask is a very popular python framework designed for specifically for front-end development. In this project, Flask is not only being used for developing the front-end/user interface but also being used for importing several other libraries such as session, encryption, jsonify, json, HTML etc. Also being used in the project is MYSQL library. This library basically creates a bridge between the front-end such as website and the backend such as the MYSQL database. This library is very critical in this application as without it, the front-end and backend would not be able to connect with each other and act as separate entities.
+    </p>
+    <p>
+        <h3>MYSQL for Back-end development</h3>
+
+        MYSQL is a highly popular relational database management system. Its name is a combination of “My”, the name of co-founder Michael Widenius’s daughter, and “SQL”, the abbreviation for Structured Query Language.[4] It is very commonly used in different industries to store data. This project also uses MYSQL to store the data. MYSQL Workbench, a tool to communicate with MYSQL server, is also being used in the project for the intended purpose. The MYSQL database has been separated in 4 different entities with specific relationship to each other. The four entities are User_Account, User, Address, and Daily_Water_Usage. User_Account, as mentioned before stores all the active user accounts. User entity holds data about the active users such as first name, last name etc. Address entity retains the information about user addresses. And, finally the Daily_Water_Usage entity is where key data such as shower_data, kitchen_sink_data, bathroom_sink_data, toilet_data, sprinkler_data etc. are stored. This is the only entity that get updated regularly as per users input. The data from this table is very crucial for this project since it’s used for data analysis and data visualization which is the core of this project.
+    </p>
+
+    <p>
+
+        <h3>References</h3>
+
+
+        [1] N.A, How Much Water is there on Earth?
+        <a href="https://www.usgs.gov/special-topic/water-science-school/science/how-much-water-there-earth?qt-science_center_objects=0#qt-science_center_objects">https://www.usgs.gov/special-topic/water-science-school/science/how-much-water-there-earth?qt-science_center_objects=0#qt-science_center_objects</a>
+        <br>
+        [2] Castelo, J. What is the percentage of drinkable water on earth?
+        <a href="https://worldwaterreserve.com/water-crisis/percentage-of-drinkable-water-on-earth/">https://worldwaterreserve.com/water-crisis/percentage-of-drinkable-water-on-earth/</a>
+        <br>
+        [3]  N.A, Wikipedia ,
+        <a href ="https://en.wikipedia.org/wiki/Python_%28programming_language%29">https://en.wikipedia.org/wiki/Python_%28programming_language%29</a>
+        <br>
+        [4]  N.A, Wikipedia
+        <a href="//en.wikipedia.org/wiki/MySQL">//en.wikipedia.org/wiki/MySQL</a>
     </p>
 </div>
 </body>

@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request, redirect, json, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flaskext.mysql import MySQL
 from datetime import date
 from encryptor import *
+import simplejson as json
+from decimal import Decimal
 
 app = Flask(__name__)
 app.secret_key = 'password'
@@ -154,28 +156,160 @@ def input_data(user_email):
 
 @app.route('/report/<username>')
 def report(username):
-    # TODO render the report template for the given user
-    get_water_usage_date_query = "SELECT * FROM Daily_Water_Usage where username = %s"
-    username_data = (username,)
+    return render_template('report.html', username=username)
+
+
+def default_date_converter(o):
+    if isinstance(o, date):
+        date_array = o.isoformat().split("-")
+        return date_array[0]
+
+
+@app.route('/ajax-state-report/<state>', defaults={'city': '', 'username': ''}, methods=["GET"])
+@app.route('/ajax-city-report/<city>', defaults={'state': '', 'username': ''}, methods=["GET"])
+@app.route('/ajax-user-report/<username>', defaults={'state': '', 'city': ''}, methods=["GET"])
+def ajax_report(state, city, username):
+    if state:
+        get_water_usage_date_query = "SELECT D.* FROM Daily_water_tracker.Daily_Water_Usage AS D, " \
+                                     "Daily_water_tracker.Address AS A, Daily_water_tracker.User AS U " \
+                                     "where A.state = %s AND " \
+                                     "A.address_id = U.address_id AND " \
+                                     "U.username = D.username " \
+                                     "ORDER BY D.date"
+        data = (state,)
+
+    elif city:
+        get_water_usage_date_query = "SELECT D.* FROM Daily_water_tracker.Daily_Water_Usage AS D, " \
+                                     "Daily_water_tracker.Address AS A, Daily_water_tracker.User AS U " \
+                                     "where A.city = %s AND " \
+                                     "A.address_id = U.address_id AND " \
+                                     "U.username = D.username " \
+                                     "ORDER BY D.date"
+        data = (city,)
+
+    else:
+        get_water_usage_date_query = "SELECT * FROM Daily_Water_Usage where username = %s"\
+                                     "ORDER BY date"
+        data = (username,)
 
     db_connection = mysql.connect()
     cursor = db_connection.cursor()
-    cursor.execute(get_water_usage_date_query, username_data)
+    cursor.execute(get_water_usage_date_query, data)
     result = cursor.fetchall()
 
     if result:
-        # TODO show the result in graph form
-        print('how to show the result in graph')
-        return render_template('report.html')
+
+        shower_data_entries = []
+        toilet_data_entries = []
+        bathroom_sink_data_entries = []
+        kitchen_sink_data_entries = []
+        drinking_water_data_entries = []
+        sprinkler_data_entries = []
+        miscellaneous_data_entries = []
+        date_data_entries = []
+
+        current_date = result[0][8].strftime('%Y')
+        total_shower_data = 0
+        total_toilet_data = 0
+        total_bathroom_sink_data = 0
+        total_kitchen_sink_data = 0
+        total_drinking_water_data = 0
+        total_sprinkler_data = 0
+        total_miscellaneous_data = 0
+        counter = 0
+
+        for entry in result:
+            if current_date != entry[8].strftime('%Y'):
+
+                shower_data_entries.append(total_shower_data / counter)
+                toilet_data_entries.append(total_toilet_data / counter)
+                bathroom_sink_data_entries.append(total_bathroom_sink_data / counter)
+                kitchen_sink_data_entries.append(total_kitchen_sink_data / counter)
+                drinking_water_data_entries.append(total_drinking_water_data / counter)
+                sprinkler_data_entries.append(total_sprinkler_data / counter)
+                miscellaneous_data_entries.append(total_miscellaneous_data / counter)
+                date_data_entries.append(current_date)
+
+                counter = 0
+
+                total_shower_data = 0
+                total_toilet_data = 0
+                total_bathroom_sink_data = 0
+                total_kitchen_sink_data = 0
+                total_drinking_water_data = 0
+                total_sprinkler_data = 0
+                total_miscellaneous_data = 0
+                current_date = entry[8].strftime('%Y')
+
+            total_shower_data += entry[1]
+            total_toilet_data += entry[2]
+            total_bathroom_sink_data += entry[3]
+            total_kitchen_sink_data += entry[4]
+            total_drinking_water_data += round(entry[5] * Decimal('0.06340149'))  # conversion from cup to gallons
+            total_sprinkler_data += entry[6]
+            total_miscellaneous_data += entry[7]
+            counter += 1
+
+        # This appends the leftover data once the exited the loop
+        shower_data_entries.append(total_shower_data / counter)
+        toilet_data_entries.append(total_toilet_data / counter)
+        bathroom_sink_data_entries.append(total_bathroom_sink_data / counter)
+        kitchen_sink_data_entries.append(total_kitchen_sink_data / counter)
+        drinking_water_data_entries.append(total_drinking_water_data / counter)
+        sprinkler_data_entries.append(total_sprinkler_data / counter)
+        miscellaneous_data_entries.append(total_miscellaneous_data / counter)
+        date_data_entries.append(current_date)
+
+        json_shower_data = {
+            'name': 'shower_data',
+            'values': shower_data_entries
+        }
+        json_kitchen_sink_data = {
+            'name': 'kitchen_sink_data',
+            'values': kitchen_sink_data_entries
+        }
+        json_bathroom_sink_data = {
+            'name': 'bathroom_sink_data',
+            'values': bathroom_sink_data_entries
+        }
+        json_toilet_data = {
+            'name': 'toilet_data',
+            'values': toilet_data_entries
+        }
+        json_drinking_water_data = {
+            'name': 'drinking_water_data',
+            'values': drinking_water_data_entries
+        }
+        json_sprinkler_data = {
+            'name': 'sprinkler_data',
+            'values': sprinkler_data_entries
+        }
+        json_miscellaneous_data = {
+            'name': 'miscellaneous_data',
+            'values': miscellaneous_data_entries
+        }
+        json_water_data = [json_shower_data, json_kitchen_sink_data, json_bathroom_sink_data,
+                           json_toilet_data, json_drinking_water_data, json_sprinkler_data,
+                           json_miscellaneous_data]
+
+        json_water_data_object = {
+            'chart': 'Water data collection',
+            'series': json_water_data,
+            'dates': date_data_entries
+        }
+
+        json_result = json.dumps(json_water_data_object, default=default_date_converter)
+
+        return json_result
+
     else:
-        return json.dumps({'error': 'No record entry found for User ' + username})
+        return json.dumps({'error': 'No record entry found'})
     return None
 
 
 @app.route('/login', defaults={'user_email': '', 'user_password': ''}, methods=['GET', 'POST'])
 @app.route('/login/<user_email>/<user_password>', methods=['GET', 'POST'])
 def login(user_email, user_password):
-
     # checks if user is already logged in, opens up the input page for that user
     if 'username' in session:
         username = session['username']
